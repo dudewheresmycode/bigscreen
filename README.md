@@ -18,11 +18,19 @@ gcc keyboard.c -o keyhog
 
 ### Bigscreen
 
-Bigscreen makes your linux-based HTPC work more like a TV.
+Remote control you HTPC like a pro!
 
 - TV-like OSD
-- Volume Control (mute/unmute, volume up/down)
+- Minimal Remote Friendly
+- System Volume Control (mute/unmute, volume up/down)
 - Sleep Timer
+
+<img src="https://github.com/dudewheresmycode/bigscreen/assets/3523761/802483a5-3ed9-414b-ae98-afc0558ef041" width="360" alt="Screenshot Muted" title="Screenshot Muted" />
+<img src="https://github.com/dudewheresmycode/bigscreen/assets/3523761/22aa4b99-1343-4f07-90cb-f35773bdeb7e" width="360" alt="Screenshot Volume" title="Screenshot Volume" />
+
+--- 
+
+Note: Bigscreen was built primarily for use with the [Plex HTPC](https://support.plex.tv/articles/htpc-getting-started/) app, but will work for any HTPC setup.
 
 Ideas:
 - custom remote key remapping
@@ -32,11 +40,11 @@ Ideas:
 
 #### Platform Support
 
-| Platform | Support |
-| ------- | ------ |
-| Linux | ✅ |
-| Mac | _Coming Soon_ |
-| Windows | _Coming Soon_ |
+| Platform | Support | System Audio Control |
+| ------- | ------ | --- |
+| Linux | ✅ | ASLA (Pulse) |
+| Mac | _Coming Soon_ | ? |
+| Windows | _Coming Soon_ | ? |
 
 #### Remotes
 
@@ -51,7 +59,7 @@ The Bigscreen app responds to the following global hot keys:
 | `Ctrl` + `Shift` + `3` | Volume Down |
 | `Ctrl` + `Shift` + `4` | Sleep Timer +30m |
 
-If you are using another type of remote, or a keyboard. You can try and remap the key events of the device to these global hot keys using a tool like `xmodmap`. 
+If you are using another type of remote, or a keyboard. You can try and remap the key events of the device to the above global hot keys using a tool like `xmodmap`. 
 
 _(More remote documentation coming soon!)_
 
@@ -65,14 +73,28 @@ Install dependencies:
 sudo apt install qt5-default qtbase5-private-dev
 ```
 
-Note: Bigscreen also uses `amixer` to control the system volume. Most distros come with this program, but if you need to, you can install it with:
+---
+
+> Note: Bigscreen also uses `amixer` to control the system volume. Most distros come with this program, but if you need to, you can install it with `sudo apt install alsa-tools`
+
+---
+
+#### qxtglobalshortcut
+Bigscreen also depends on the [`qxtglobalshortcut`](https://github.com/hluk/qxtglobalshortcut/tree/master) library to bind to the global hot keys. You'll need to follow the instructions to build and install that on your development machine.
+
 ```bash
-sudo apt install alsa-tools
+cd ~/
+git clone https://github.com/hluk/qxtglobalshortcut
+cd qxtglobalshortcut
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
+make install
 ```
 
-Make project:
+Next, clone the repo and build it:
 
 ```bash
+cd ~/
+git clone https://github.com/dudewheresmycode/bigscreen
 cd bigscreen
 cmake .
 make
@@ -82,6 +104,3 @@ Run the application:
 ```bash
 ./bigscreen
 ```
-
-Global Hot Key Support:
-https://github.com/hluk/qxtglobalshortcut/tree/master
