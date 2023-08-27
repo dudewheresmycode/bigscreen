@@ -16,14 +16,14 @@ gcc keyboard.c -o keyhog
  -->
 
 
-### Bigscreen
+## Bigscreen
 
-Remote control you HTPC like a pro!
+### _Remote control your HTPC like a pro!_
 
-- TV-like OSD
-- Minimal Remote Friendly
-- System Volume Control (mute/unmute, volume up/down)
-- Sleep Timer
+- **TV-like OSD**<br />Mimicks the on screen display of a TV
+- **Minimal Remote Friendly**<br />Works great with small streaming remotes
+- **Control System Volume**<br />Easily change the system volume, mute, and unmute.
+- **Sleep Timer**<br />Send the suspend or shutdown command with a timer
 
 <img src="https://github.com/dudewheresmycode/bigscreen/assets/3523761/802483a5-3ed9-414b-ae98-afc0558ef041" width="360" alt="Screenshot Muted" title="Screenshot Muted" />
 <img src="https://github.com/dudewheresmycode/bigscreen/assets/3523761/22aa4b99-1343-4f07-90cb-f35773bdeb7e" width="360" alt="Screenshot Volume" title="Screenshot Volume" />
