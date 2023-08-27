@@ -16,19 +16,33 @@ gcc keyboard.c -o keyhog
  -->
 
 
-### HTPC Utils
+### Bigscreen
 
-Stuff to make a HTPC linux system more like a TV. Built using qt5
+Bigscreen makes your linux-based HTPC work more like a TV.
 
-- OSD / notifications
-- volume control (mute/unmute)
-- sleep timer
+- TV-like OSD
+- Volume Control (mute/unmute, volume up/down)
+- Sleep Timer
 
 Ideas:
-- custom key remapping (OS media keys)
+- custom remote key remapping
+- handle OS media keys
+- brightness / night mode
 
-#### Remote Codes
-I used FLIRC along with a IR remote (I used one for a Roku TV). The FLIRC app allows you map IR codes to any key combination you need. This app listens for the following hotkeys:
+
+#### Platform Support
+
+| Platform | Support |
+| ------- | ------ |
+| Linux | ✅ |
+| Mac | _Coming Soon_ |
+| Windows | _Coming Soon_ |
+
+#### Remotes
+
+I used an [FLIRC](https://flirc.tv/products/flirc-usb-receiver) USB receiver along with a IR remote (I used this [replacement remote](https://www.amazon.com/dp/B096XLHVS7) for a Roku TV). The FLIRC GUI app allows you map IR codes to any key combination you need. 
+
+The Bigscreen app responds to the following global hot keys:
 
 | Action | Hot Key |
 | ------ | ------- |
@@ -37,7 +51,13 @@ I used FLIRC along with a IR remote (I used one for a Roku TV). The FLIRC app al
 | `Ctrl` + `Shift` + `3` | Volume Down |
 | `Ctrl` + `Shift` + `4` | Sleep Timer +30m |
 
+If you are using another type of remote, or a keyboard. You can try and remap the key events of the device to these global hot keys using a tool like `xmodmap`. 
+
+_(More remote documentation coming soon!)_
+
 #### Compiling From Source
+
+Bigscreen is built using the Qt5 development framework.
 
 Install dependencies:
 
