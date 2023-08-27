@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>resources/mute-white.png</file>
+  <file>resources/mute-circle.png</file>
+  <file>resources/volume-high-white.png</file>
+  <file>resources/volume-low-white.png</file>
+  <file>resources/home-theater.svg</file>
+</qresource>
+</RCC>
