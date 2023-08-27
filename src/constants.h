@@ -2,6 +2,8 @@
 #define CONSTANTS_H
 
 namespace constants {
+  static const char* APP_NAME = "Bigscreen";
+
   // interval for system udates (in milliseconds)
   const int SYSTEM_UPDATE_INTERVAL = 7000;
   // pause before hiding the volume (in milliseconds)

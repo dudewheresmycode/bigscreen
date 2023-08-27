@@ -13,21 +13,12 @@ set(bin bigscreen)
 
 include_directories(src)
 
+FILE(GLOB src_sources src/*.cpp)
+FILE(GLOB src_headers src/*.h)
+
 add_executable(${bin} 
-  src/main.cpp
-  src/mainWidget.cpp
-  src/muteIcon.cpp
-  src/volumeIcon.cpp
-  src/volumeText.cpp
-  src/trayWindow.cpp
-  src/constants.h
-  src/mainWidget.h
-  src/muteIcon.h
-  src/trayWindow.h
-  src/volume.h
-  src/volumeIcon.h
-  src/volumeIndicator.h
-  src/volumeText.h
+  ${src_sources}
+  ${src_headers}
   library.qrc
 )
 

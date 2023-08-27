@@ -7,9 +7,8 @@
 #include <QTimer>
 #include <constants.h>
 #include "muteIcon.h"
-#include "volumeIcon.h"
-#include "volumeIndicator.h"
-#include "volumeText.h"
+#include "muteDisplay.h"
+#include "volumeDisplay.h"
 
 class QPushButton;
 class QLabel;
@@ -31,8 +30,7 @@ private slots:
   void updateVolumeOSD();
   void toggleVolumeVisibility(bool visible);
   void volumeTimeout();
-  void finishFadeOut();
-  void resetVolumeOpacity();
+  void volumeDisplayHidden();
 
 public slots:
   void onMuteKeyPress();
@@ -44,15 +42,10 @@ protected:
   void timerEvent(QTimerEvent *event);
 
 private:
-  VolumeIndicator *volumeBar;
 	QPushButton* button_;
   QLabel* clock_icon_;
-  QWidget* muteWidget;
-	MuteIcon* muteIcon;
-	VolumeText* muteText;
-	VolumeIcon* volumeIcon;
-  VolumeText* volumeText;
-  QWidget* volumeWidget;
+  MuteDisplay* muteDisplay;
+  VolumeDisplay* volumeDisplay;
 
   QPixmap mute_pix_;
   QLabel* volume_down_icon_;
@@ -61,8 +54,7 @@ private:
 	QProcess process_;
 	QWidget* main_widget_;
   QTimer* volumeHideTimer;
-  QPropertyAnimation* volumeHideAnimation;
-  QGraphicsOpacityEffect* volumeHideEffect;
+  
   int timerId;
   //  QTextBrowser* textBrowser_;
 

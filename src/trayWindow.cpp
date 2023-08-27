@@ -52,9 +52,7 @@ TrayWindow::TrayWindow()
     createActions();
     createTrayIcon();
 
-    connect(showMessageButton, SIGNAL(clicked()), this, SLOT(showMessage()));
-    connect(showIconCheckBox, SIGNAL(toggled(bool)),
-            trayIcon, SLOT(setVisible(bool)));
+    connect(showIconCheckBox, SIGNAL(toggled(bool)), trayIcon, SLOT(setVisible(bool)));
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -70,7 +68,7 @@ TrayWindow::TrayWindow()
     trayIcon->show();
     trayIcon->setIcon(icon);
 
-    setWindowTitle(tr("HTPC Utils"));
+    setWindowTitle(tr(constants::APP_NAME));
     resize(400, 300);
 }
 
@@ -100,22 +98,11 @@ void TrayWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     switch (reason) {
     // case QSystemTrayIcon::Trigger:
     // case QSystemTrayIcon::DoubleClick:
-    //     break;
-    case QSystemTrayIcon::MiddleClick:
-        showMessage();
-        break;
     default:
         ;
     }
 }
 
-void TrayWindow::showMessage()
-{
-    QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(
-            typeComboBox->itemData(typeComboBox->currentIndex()).toInt());
-    trayIcon->showMessage(titleEdit->text(), bodyEdit->toPlainText(), icon,
-                          durationSpinBox->value() * 1000);
-}
 
 void TrayWindow::messageClicked()
 {
@@ -145,58 +132,31 @@ void TrayWindow::createIconGroupBox()
 
 void TrayWindow::createMessageGroupBox()
 {
-    messageGroupBox = new QGroupBox(tr("Balloon Message"));
+    messageGroupBox = new QGroupBox(tr("On Screen Display"));
 
-    typeLabel = new QLabel(tr("Type:"));
+    themeLabel = new QLabel(tr("Theme:"));
 
-    typeComboBox = new QComboBox;
-    typeComboBox->addItem(tr("None"), QSystemTrayIcon::NoIcon);
-    typeComboBox->addItem(style()->standardIcon(
-            QStyle::SP_MessageBoxInformation), tr("Information"),
-            QSystemTrayIcon::Information);
-    typeComboBox->addItem(style()->standardIcon(
-            QStyle::SP_MessageBoxWarning), tr("Warning"),
-            QSystemTrayIcon::Warning);
-    typeComboBox->addItem(style()->standardIcon(
-            QStyle::SP_MessageBoxCritical), tr("Critical"),
-            QSystemTrayIcon::Critical);
-    typeComboBox->setCurrentIndex(1);
+    themeComboBox = new QComboBox;
+    themeComboBox->addItem(tr("Mykonos (Default)"), QSystemTrayIcon::NoIcon);
+    themeComboBox->addItem(tr("Minimal"), QSystemTrayIcon::NoIcon);
+    themeComboBox->setCurrentIndex(0);
 
     durationLabel = new QLabel(tr("Duration:"));
 
     durationSpinBox = new QSpinBox;
-    durationSpinBox->setRange(5, 60);
+    durationSpinBox->setRange(1, 10);
     durationSpinBox->setSuffix(" s");
-    durationSpinBox->setValue(15);
+    durationSpinBox->setValue((int) round(constants::VOLUME_HIDE_DURATION / 1000));
 
-    durationWarningLabel = new QLabel(tr("(some systems might ignore this "
-                                         "hint)"));
-    durationWarningLabel->setIndent(10);
 
-    titleLabel = new QLabel(tr("Title:"));
 
-    titleEdit = new QLineEdit(tr("Cannot connect to network"));
-
-    bodyLabel = new QLabel(tr("Body:"));
-
-    bodyEdit = new QTextEdit;
-    bodyEdit->setPlainText(tr("Don't believe me. Honestly, I don't have a "
-                              "clue.\nClick this balloon for details."));
-
-    showMessageButton = new QPushButton(tr("Show Message"));
-    showMessageButton->setDefault(true);
 
     QGridLayout *messageLayout = new QGridLayout;
-    messageLayout->addWidget(typeLabel, 0, 0);
-    messageLayout->addWidget(typeComboBox, 0, 1, 1, 2);
+    messageLayout->addWidget(themeLabel, 0, 0);
+    messageLayout->addWidget(themeComboBox, 0, 1, 1, 2);
     messageLayout->addWidget(durationLabel, 1, 0);
     messageLayout->addWidget(durationSpinBox, 1, 1);
-    messageLayout->addWidget(durationWarningLabel, 1, 2, 1, 3);
-    messageLayout->addWidget(titleLabel, 2, 0);
-    messageLayout->addWidget(titleEdit, 2, 1, 1, 4);
-    messageLayout->addWidget(bodyLabel, 3, 0);
-    messageLayout->addWidget(bodyEdit, 3, 1, 2, 4);
-    messageLayout->addWidget(showMessageButton, 5, 4);
+
     messageLayout->setColumnStretch(3, 1);
     messageLayout->setRowStretch(4, 1);
     messageGroupBox->setLayout(messageLayout);

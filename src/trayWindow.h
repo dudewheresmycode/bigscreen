@@ -43,6 +43,7 @@
 
 #include <QSystemTrayIcon>
 #include <QDialog>
+#include "constants.h"
 
 class QAction;
 class QCheckBox;
@@ -69,7 +70,6 @@ protected:
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
-    void showMessage();
     void messageClicked();
     void helpMenuTriggered();
 
@@ -85,16 +85,10 @@ private:
     QCheckBox *showIconCheckBox;
 
     QGroupBox *messageGroupBox;
-    QLabel *typeLabel;
     QLabel *durationLabel;
-    QLabel *durationWarningLabel;
-    QLabel *titleLabel;
-    QLabel *bodyLabel;
-    QComboBox *typeComboBox;
+    QLabel *themeLabel;
+    QComboBox *themeComboBox;
     QSpinBox *durationSpinBox;
-    QLineEdit *titleEdit;
-    QTextEdit *bodyEdit;
-    QPushButton *showMessageButton;
 
     QAction *helpAction;
     // QAction *minimizeAction;

@@ -4,11 +4,7 @@
 #include "mainWidget.h"
 #include "volume.h"
 
-// Constructor for main widget
-// add to enable frameless mode
-// Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint
-MainWidget::MainWidget(QWidget *parent) :
-    QWidget(parent) {
+MainWidget::MainWidget(QWidget *parent) : QWidget(parent) {
   Q_INIT_RESOURCE(library);
 
   // set window size and position in top right
@@ -30,47 +26,18 @@ MainWidget::MainWidget(QWidget *parent) :
 	setWindowTitle(tr("htpc-utils"));
 
   // setup widgets
-  muteWidget = new QWidget;
-  muteWidget->setParent(this);
+  muteDisplay = new MuteDisplay;
+  muteDisplay->setParent(this);
 
-  muteIcon = new MuteIcon;
-  muteIcon->setParent(muteWidget);
-
-  muteText = new VolumeText();
-  muteText->setParent(muteWidget);
-  muteText->setText("MUTE");
-  
-  volumeWidget = new QWidget;
-  volumeWidget->setParent(this);
-
-  volumeIcon = new VolumeIcon;
-  volumeIcon->setParent(volumeWidget);
-
-  volumeText = new VolumeText();
-  volumeText->setParent(volumeWidget);
-  volumeText->setVisible(true);
-  volumeText->setText("0");
-
-  volumeBar = new VolumeIndicator;
-  volumeBar->setParent(volumeWidget);
-  volumeBar->setVisible(true);
+  volumeDisplay = new VolumeDisplay;
+  volumeDisplay->setParent(this);
+  connect(volumeDisplay, SIGNAL(finished()), this, SLOT(volumeDisplayHidden()));
 
   volumeHideTimer = new QTimer(this);
   connect(volumeHideTimer, SIGNAL(timeout()), this, SLOT(volumeTimeout()));
 
   // get volume status first
   volumeControl::getVolume();
-
-  // setup fade in/out animation
-  volumeHideEffect = new QGraphicsOpacityEffect(this);
-  volumeHideEffect->setOpacity(1);
-  volumeHideAnimation = new QPropertyAnimation(volumeHideEffect, "opacity");
-  volumeHideAnimation->setDuration(1000);
-  volumeHideAnimation->setStartValue(1);
-  volumeHideAnimation->setEndValue(0);
-
-  volumeWidget->setGraphicsEffect(volumeHideEffect);
-
   updateVolumeOSD();
 }
 
@@ -79,24 +46,11 @@ MainWidget::~MainWidget() {
   Q_CLEANUP_RESOURCE(library);
 }
 
-
-void MainWidget::finishFadeOut() {
-  qDebug() << "finishFadeOut...";
-  // QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect(this);
-  volumeHideEffect->setOpacity(1);
-  volumeWidget->setVisible(false);
-  setVisible(false);
-}
-
-void MainWidget::resetVolumeOpacity() {
-  volumeHideAnimation->stop();
-  volumeHideEffect->setOpacity(1);
-}
-
 void MainWidget::toggleVolumeVisibility(bool visible) {
   qDebug() << QString("volume-ui - Setting visibility to: %1").arg(visible);
-  volumeWidget->setVisible(visible);
-  resetVolumeOpacity();
+  volumeDisplay->reset();
+  volumeDisplay->setVisible(visible);
+
   if (volumeHideTimer->isActive()) {
     qDebug() << "canceling timer";
     volumeHideTimer->stop();
@@ -107,27 +61,29 @@ void MainWidget::toggleVolumeVisibility(bool visible) {
     volumeHideTimer->setSingleShot(true);
     volumeHideTimer->start(constants::VOLUME_HIDE_DURATION);
   }
-  
+}
+
+void MainWidget::volumeDisplayHidden() {
+  // hide the window
+  setVisible(false);
+  qDebug() << "volumeDisplayHidden";
 }
 
 void MainWidget::volumeTimeout() {
   qDebug() << "volumeTimeout";
-  volumeHideAnimation->setEasingCurve(QEasingCurve::InQuad);
-  volumeHideAnimation->start();
-  connect(volumeHideAnimation, SIGNAL(finished()), this, SLOT(finishFadeOut()));
+  volumeDisplay->fadeOut();
 }
 
 void MainWidget::updateVolumeOSD() {
   // one way or another we'll display something
   setVisible(true);
   // either mute
-	muteWidget->setVisible(volumeControl::isMuted);
+	muteDisplay->setVisible(volumeControl::isMuted);
   // either or volume control
   toggleVolumeVisibility(!volumeControl::isMuted);
 
   if (!volumeControl::isMuted) {
-    volumeText->setText(QString("%1").arg(volumeControl::volumePercent));
-    volumeBar->upd((qreal)(volumeControl::volumePercent / 100.0));
+    volumeDisplay->update(volumeControl::volumePercent);
   }
 }
 
@@ -154,7 +110,8 @@ void MainWidget::onVolumeUpKeyPress() {
 }
 
 void MainWidget::onVolumeDownKeyPress() {
-  // ignore volume press when muted
+  // TODO: Allow turning down volume while still muted, and apply that lower 
+  // volume when unmuted. For now just ignore the volume press when muted.
   if (volumeControl::isMuted) {
     return;
   }
@@ -165,5 +122,5 @@ void MainWidget::onVolumeDownKeyPress() {
 
 void MainWidget::onSleepKeyPress() {
   qDebug() << "onSleepKeyPress";
-
+  
 }
